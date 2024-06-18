@@ -1,10 +1,11 @@
 package com.example.classes;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NoLifeSupportShip extends Ship {
+public class NoLifeSupportShip extends Ship implements Serializable {
 
     private String shipAIType;
 
@@ -14,6 +15,7 @@ public class NoLifeSupportShip extends Ship {
     }
 
     public static NoLifeSupportShip constructor(String name, int maxCargoMassCapacity, ShipType shipType, Integer solarFlareShieldStrength, String shipAIType) {
+        validArgsCheck(name, maxCargoMassCapacity, shipType, solarFlareShieldStrength);
         Util.validString(shipAIType);
         return new NoLifeSupportShip(name, maxCargoMassCapacity,shipType,solarFlareShieldStrength,shipAIType);
     }

@@ -1,11 +1,8 @@
 package com.example.classes;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public abstract class Ship {
-    Set<Ship> shipsExtent = new HashSet<>();
 
     private String name;
     private Integer maxCargoMassCapacity;
@@ -16,33 +13,31 @@ public abstract class Ship {
     private Set<Cargo> cargoSet;
     private Set<Contract> contracts;
 
-    public Ship(String name, int maxCargoMassCapacity, ShipType shipType, Integer solarFlareShieldStrength) {
+    protected Ship(String name, int maxCargoMassCapacity, ShipType shipType, Integer solarFlareShieldStrength) {
+        validArgsCheck(name, maxCargoMassCapacity, shipType, solarFlareShieldStrength);
         setName(name);
         setMaxCargoMassCapacity(maxCargoMassCapacity);
+        this.shipType = shipType;
+        this.solarFlareShieldStrength = solarFlareShieldStrength;
+
+        cargoSet = new HashSet<>();
+        contracts = new HashSet<>();
+    }
+
+    public static void validArgsCheck(String name, int maxCargoMassCapacity, ShipType shipType, Integer solarFlareShieldStrength){
+        Util.validString(name);
+        Util.positiveIntCheck(maxCargoMassCapacity);
         if (shipType == ShipType.Shielded) {
             if (solarFlareShieldStrength == null) {
                 throw new RuntimeException("Shielded ship can't have null solar flare shield strength");
             }
-            this.shipType = ShipType.Shielded;
-            setSolarFlareShieldStrength(solarFlareShieldStrength);
+            Util.nonNegativeIntCheck(solarFlareShieldStrength);
         }
         if (shipType == ShipType.NoProtection) {
             if (solarFlareShieldStrength != null) {
                 throw new RuntimeException("No protection ship can't have solar flare shield strength");
             }
-            this.shipType = ShipType.NoProtection;
         }
-        cargoSet = new HashSet<>();
-        contracts = new HashSet<>();
-        shipsExtent.add(this);
-    }
-
-    public Set<Ship> getShipsExtent() {
-        return Collections.unmodifiableSet(shipsExtent);
-    }
-
-    public void resetExtent() {
-        shipsExtent = new HashSet<>();
     }
 
     public String getName() {
@@ -60,7 +55,6 @@ public abstract class Ship {
 
     public void setMaxCargoMassCapacity(Integer maxCargoMassCapacity) {
         Util.positiveIntCheck(maxCargoMassCapacity);
-
         this.maxCargoMassCapacity = maxCargoMassCapacity;
     }
 
@@ -79,7 +73,7 @@ public abstract class Ship {
         if (shipType == ShipType.NoProtection) {
             throw new RuntimeException("No protection ship does not have solar flare shield strength attribute");
         }
-        Util.nonNegativeDoubleCheck(solarFlareShieldStrength);
+        Util.nonNegativeIntCheck(solarFlareShieldStrength);
         this.solarFlareShieldStrength = solarFlareShieldStrength;
     }
 

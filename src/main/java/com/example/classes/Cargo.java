@@ -1,11 +1,11 @@
 package com.example.classes;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Cargo implements Comparable<Cargo> {
-    private static Set<Cargo> cargoExtent = new HashSet<>();
+public class Cargo extends ObjectPlus implements Comparable<Cargo>, Serializable {
     private static Set<String> registeredOwners = new HashSet<>();
 
     private String name;
@@ -15,23 +15,25 @@ public class Cargo implements Comparable<Cargo> {
     private Galaxy destination;
     private Ship ship;
 
-    public Cargo(String name, int mass, String owner) {
+    private Cargo(String name, int mass, String owner) {
         setName(name);
         setMass(mass);
         setOwner(owner);
-        cargoExtent.add(this);
     }
 
-    public static Set<Cargo> getCargoExtent() {
-        return Collections.unmodifiableSet(cargoExtent);
-    }
-
-    public static void resetExtent() {
-        cargoExtent = new HashSet<>();
+    public static Cargo constructor(String name, int mass, String owner) {
+        Util.validString(name);
+        Util.positiveIntCheck(mass);
+        validOwnerCheck(owner);
+        return new Cargo(name, mass, owner);
     }
 
     public static Set<String> getRegisteredOwners() {
         return Collections.unmodifiableSet(registeredOwners);
+    }
+
+    public static void setRegisteredOwners(Set<String> registeredOwners) {
+        Cargo.registeredOwners = registeredOwners;
     }
 
     public static void addRegisteredOwner(String owner) {
@@ -39,14 +41,16 @@ public class Cargo implements Comparable<Cargo> {
         registeredOwners.add(owner);
     }
 
-    public static void removeRegisteredOwner(String owner) {
-        for (Cargo cargo : cargoExtent) {
-            if (cargo.owner.equals(owner))
-                throw new RuntimeException("Can not remove an owner that already has cargo.");
+    public static void removeRegisteredOwner(String owner) throws Exception {
+        Iterable<Cargo> extent = getExtent(Cargo.class);
+        if (extent != null) {
+            for (Cargo cargo : extent) {
+                if (cargo.owner.equals(owner))
+                    throw new RuntimeException("Can not remove an owner that already has cargo.");
+            }
+            registeredOwners.remove(owner);
         }
-        registeredOwners.remove(owner);
     }
-
 
     public String getName() {
         return name;
@@ -63,7 +67,7 @@ public class Cargo implements Comparable<Cargo> {
     public void setMass(int mass) {
         Util.positiveIntCheck(mass);
         if (ship != null) {
-            ship.canAddCargoCheck(mass);
+            ship.canAddCargoCheck(mass - this.mass);
         }
         this.mass = mass;
     }
@@ -73,9 +77,13 @@ public class Cargo implements Comparable<Cargo> {
     }
 
     public void setOwner(String owner) {
+        validOwnerCheck(owner);
+        this.owner = owner;
+    }
+
+    private static void validOwnerCheck(String owner) {
         Util.validString(owner);
         if (!registeredOwners.contains(owner)) throw new RuntimeException("Owner is not in registered owners.");
-        this.owner = owner;
     }
 
     public Galaxy getDestination() {

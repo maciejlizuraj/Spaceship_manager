@@ -1,11 +1,10 @@
 package com.example.classes;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 
-public class Galaxy {
-    private static Set<Galaxy> galaxyExtent = new HashSet<>();
-
+public class Galaxy extends ObjectPlus implements Serializable {
     private String name;
     private String galaxyCode;
     private Boolean atWar;
@@ -30,23 +29,22 @@ public class Galaxy {
         }
         ships = new HashSet<>();
         cargoSet = new HashSet<>();
-        galaxyExtent.add(this);
     }
 
     public static Galaxy peacefulGalaxyConstructor(String name, String galaxyCode, LocalDate peacefulSince) {
+        Util.validString(name);
+        galaxyCodeUniquenessCheck(galaxyCode);
+        if (peacefulSince==null) throw new RuntimeException("Peaceful since can't be null");
         return new Galaxy(name, galaxyCode, null, null, peacefulSince, GalaxyType.Peaceful);
     }
 
     public static Galaxy dangerousGalaxyConstructor(String name, String galaxyCode, Boolean atWar, Integer solarFlareStrength) {
+        Util.validString(name);
+        galaxyCodeUniquenessCheck(galaxyCode);
+        if (atWar==null) throw new RuntimeException("At war can't be null");
+        if (solarFlareStrength==null) throw new RuntimeException("Solar flare strength can't be null");
+        Util.nonNegativeIntCheck(solarFlareStrength);
         return new Galaxy(name, galaxyCode, atWar, solarFlareStrength, null, GalaxyType.Dangerous);
-    }
-
-    public static Set<Galaxy> getGalaxyExtent() {
-        return Collections.unmodifiableSet(galaxyExtent);
-    }
-
-    public static void resetExtent() {
-        galaxyExtent = new HashSet<>();
     }
 
     public String getName() {
@@ -89,6 +87,7 @@ public class Galaxy {
 
     private void setSolarFlareStrength(Integer solarFlareStrength) {
         if (atWar == null) throw new RuntimeException("Solar flare strength can't be set to null");
+        Util.nonNegativeIntCheck(solarFlareStrength);
         this.solarFlareStrength = solarFlareStrength;
     }
 
@@ -167,9 +166,20 @@ public class Galaxy {
     }
 
 
-    public void galaxyCodeUniquenessCheck(String galaxyCode) {
-        if (galaxyExtent.stream().anyMatch(galaxy -> galaxy.getGalaxyCode().equals(galaxyCode)))
-            throw new RuntimeException("Galaxy code is already in use");
+    public static void galaxyCodeUniquenessCheck(String galaxyCode) {
+        Util.validString(galaxyCode);
+        try {
+            Iterable<Galaxy> extent = getExtent(Galaxy.class);
+            if (extent != null) {
+                for (Galaxy galaxy : extent) {
+                    if (galaxy.getGalaxyCode().equals(galaxyCode)) {
+                        throw new RuntimeException("Galaxy code is already in use");
+                    }
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

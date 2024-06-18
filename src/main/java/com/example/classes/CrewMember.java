@@ -1,25 +1,16 @@
 package com.example.classes;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class CrewMember {
-    private static Set<CrewMember> crewMemberExtent = new HashSet<>();
+public abstract class CrewMember extends ObjectPlus implements Serializable {
 
     private Set<Contract> contracts;
 
-    public CrewMember() {
+    protected CrewMember() {
         contracts = new HashSet<>();
-        crewMemberExtent.add(this);
-    }
-
-    public static Set<CrewMember> getCrewMemberExtent() {
-        return Collections.unmodifiableSet(crewMemberExtent);
-    }
-
-    public static void resetExtent() {
-        crewMemberExtent = new HashSet<>();
     }
 
     public Set<Contract> getContracts() {

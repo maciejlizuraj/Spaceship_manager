@@ -1,12 +1,8 @@
 package com.example.classes;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
-public class Contract {
-    private static Set<Contract> contractExtent = new HashSet<>();
-
+public class Contract extends ObjectPlus implements Serializable {
     private String role;
     private Double salary;
     private Ship ship;
@@ -20,15 +16,14 @@ public class Contract {
         setCrewMember(crewMember);
         ship.addContract(this);
         crewMember.addContract(this);
-        contractExtent.add(this);
     }
 
-    public static Set<Contract> getContractExtent() {
-        return Collections.unmodifiableSet(contractExtent);
-    }
-
-    public static void resetExtent() {
-        contractExtent = new HashSet<>();
+    public static Contract constructor(String role, Double salary, Ship ship, CrewMember crewMember) {
+        Util.validString(role);
+        if (ship == null) throw new RuntimeException("Ship can't be null");
+        if (crewMember == null) throw new RuntimeException("Crew member can't be null");
+        validSalary(salary, crewMember);
+        return new Contract(role, salary, ship, crewMember);
     }
 
     public void setToNulls() {
@@ -50,13 +45,16 @@ public class Contract {
     }
 
     public void setSalary(Double salary) {
+        validSalary(salary, getCrewMember());
+        this.salary = salary;
+    }
+
+    public static void validSalary(Double salary, CrewMember crewMember) {
         if (crewMember instanceof MechanicalCrewMember && salary != null) {
             throw new RuntimeException("Mechanical crew member can't have a salary");
         } else if (crewMember instanceof OrganicCrewMember) {
             Util.nonNegativeDoubleCheck(salary);
         }
-
-        this.salary = salary;
     }
 
     public Ship getShip() {

@@ -1,18 +1,24 @@
 package com.example.classes;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class OrganicCrewMember extends CrewMember {
+public class OrganicCrewMember extends CrewMember implements Serializable {
 
     private String name;
     private FoodType acceptableFoodType;
 
-    public OrganicCrewMember(String name, FoodType acceptableFoodType) {
+    private OrganicCrewMember(String name, FoodType acceptableFoodType) {
         super();
         setName(name);
         setAcceptableFoodType(acceptableFoodType);
+    }
+
+    public static OrganicCrewMember constructor(String name, FoodType acceptableFoodType) {
+        Util.validString(name);
+        return new OrganicCrewMember(name, acceptableFoodType);
     }
 
 

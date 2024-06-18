@@ -1,9 +1,10 @@
 package com.example.classes;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MechanicalCrewMember extends CrewMember {
+public class MechanicalCrewMember extends CrewMember implements Serializable {
 
     private String serialNumber;
     private String modelNumber;

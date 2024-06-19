@@ -205,7 +205,7 @@ public class ManageRoute extends Application {
         gridPane.add(removeTargetButton, 0, 2);
         gridPane.add(removeAllUnreachableButton,3,3);
 
-        Scene scene = new Scene(gridPane, 1000, 800);
+        Scene scene = new Scene(gridPane, 1000, 600);
         primaryStage.setTitle("Manage " + ship.getName() + "'s Route and Cargo");
         primaryStage.setScene(scene);
         primaryStage.show();

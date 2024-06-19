@@ -95,10 +95,10 @@ public class ManageRoute extends Application {
         TableColumn<Galaxy, String> galaxyCodeColumn1 = new TableColumn<>("Code");
         galaxyCodeColumn1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGalaxyCode()));
 
-        TableColumn<Galaxy, String> numberOfCargoColumn1 = new TableColumn<>("Code");
+        TableColumn<Galaxy, String> numberOfCargoColumn1 = new TableColumn<>("# of cargo");
         numberOfCargoColumn1.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(getNumberOfCargo(map, cellData.getValue()))));
 
-        TableColumn<Galaxy, String> totalMassColumn1 = new TableColumn<>("Code");
+        TableColumn<Galaxy, String> totalMassColumn1 = new TableColumn<>("Total mass");
         totalMassColumn1.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(getTotalMassOfCargo(map, cellData.getValue()))));
 
         TableColumn<Galaxy, Void> setTargetColumn = new TableColumn<>("Set target");
@@ -143,10 +143,10 @@ public class ManageRoute extends Application {
         TableColumn<Galaxy, String> galaxyCodeColumn2 = new TableColumn<>("Code");
         galaxyCodeColumn2.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGalaxyCode()));
 
-        TableColumn<Galaxy, String> numberOfCargoColumn2 = new TableColumn<>("Code");
+        TableColumn<Galaxy, String> numberOfCargoColumn2 = new TableColumn<>("# of cargo");
         numberOfCargoColumn2.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(getNumberOfCargo(map, cellData.getValue()))));
 
-        TableColumn<Galaxy, String> totalMassColumn2 = new TableColumn<>("Code");
+        TableColumn<Galaxy, String> totalMassColumn2 = new TableColumn<>("Total mass");
         totalMassColumn2.setCellValueFactory(cellData -> new SimpleStringProperty(Integer.toString(getTotalMassOfCargo(map, cellData.getValue()))));
 
         TableColumn<Galaxy, Void> unloadCargo = new TableColumn<>("Unload cargo");

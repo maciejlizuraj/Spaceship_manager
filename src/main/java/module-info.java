@@ -8,7 +8,6 @@ module com.example.finalprojectnodatabase {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
     opens com.example.finalprojectnodatabase to javafx.fxml;
